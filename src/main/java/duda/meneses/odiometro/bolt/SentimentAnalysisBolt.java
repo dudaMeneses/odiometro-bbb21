@@ -1,6 +1,5 @@
 package duda.meneses.odiometro.bolt;
 
-import duda.meneses.odiometro.dictionary.DictionaryWords;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -18,20 +16,10 @@ import java.util.Map;
 public class SentimentAnalysisBolt extends BaseRichBolt {
 
     @NonNull
-    private final long logIntervalSec;
-
-    @NonNull
-    private final long clearIntervalSec;
-
-    private Map<String, Long> sentimentScoreCounter;
-    private long lastLogTime;
-    private long lastClearTime;
+    private final SentimentRepository repository;
 
     @Override
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-        sentimentScoreCounter = new HashMap<>();
-        lastLogTime = System.currentTimeMillis();
-        lastClearTime = System.currentTimeMillis();
     }
 
     @Override
