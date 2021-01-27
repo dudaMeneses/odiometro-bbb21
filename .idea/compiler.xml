@@ -10,12 +10,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="odiometro-bbb21" target="15" />
+      <module name="odiometro-bbb21" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="odiometro-bbb21" options="-parameters" />
+      <module name="odiometro-bbb21" options="" />
     </option>
   </component>
 </project>

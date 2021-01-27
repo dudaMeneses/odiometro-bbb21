@@ -2,6 +2,7 @@ package duda.meneses.odiometro.bolt;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.IBasicBolt;
@@ -16,6 +17,7 @@ import org.apache.storm.tuple.Values;
 import java.util.Map;
 import java.util.stream.Stream;
 
+@Slf4j
 @RequiredArgsConstructor
 public class TweetWordSplitterBolt extends BaseRichBolt {
 

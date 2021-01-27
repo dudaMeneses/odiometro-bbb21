@@ -2,6 +2,7 @@ package duda.meneses.odiometro.bolt;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -15,13 +16,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+@Slf4j
 @RequiredArgsConstructor
 public class MentionBolt extends BaseRichBolt {
 
     private OutputCollector collector;
-
-    @NonNull
-    private final Set<String> languages;
 
     @NonNull
     private final Set<String> hashtags;
@@ -37,30 +36,28 @@ public class MentionBolt extends BaseRichBolt {
     @Override
     public void execute(Tuple input) {
         Status tweet = (Status) input.getValueByField("tweet");
-        String lang = tweet.getUser().getLang();
+
         String text = tweet.getText()
                 .replaceAll("\\p{Punct}", " ")
                 .replaceAll("\\r|\\n", "")
                 .toLowerCase();
 
-        if (this.languages.contains(lang)) {
-            Stream.of(tweet.getUserMentionEntities()).forEach(mention -> {
-                String mentionUserText = mention.getName().toLowerCase();
+        Stream.of(tweet.getUserMentionEntities()).forEach(mention -> {
+            String mentionUserText = mention.getName().toLowerCase();
 
-                if (this.mentions.contains(mentionUserText)) {
-                    collector.emit(new Values(mentionUserText, text));
-                }
-            });
+            if (this.mentions.contains(mentionUserText)) {
+                collector.emit(new Values(mentionUserText, text));
+            }
+        });
 
 
-            Stream.of(tweet.getHashtagEntities()).forEach(hashtag ->{
-                String hashtagText = hashtag.getText().toLowerCase();
+        Stream.of(tweet.getHashtagEntities()).forEach(hashtag ->{
+            String hashtagText = hashtag.getText().toLowerCase();
 
-                if (this.hashtags.contains(hashtagText)) {
-                    collector.emit(new Values(hashtagText, text));
-                }
-            });
-        }
+            if (this.hashtags.contains(hashtagText)) {
+                collector.emit(new Values(hashtagText, text));
+            }
+        });
     }
 
     @Override
